@@ -47,6 +47,7 @@ function render() {
 function playerMove(i) {
   if (cells[i] || gameOver) return;
   cells[i] = 'X';
+  render();
   if (checkWin('X')) return end('You win!');
   if (cells.every(c => c)) return end('Draw!');
   computerMove();
@@ -54,4 +55,33 @@ function playerMove(i) {
 
 function computerMove() {
   let empty = cells.map((v,i)=>v?null:i).filter(v=>v!==null);
-  let move = empty[Math.floor(Math.random()*empty.*]()
+  let move = empty[Math.floor(Math.random()*empty.length)];
+  cells[move] = 'O';
+  render();
+  if (checkWin('O')) return end('Computer wins!');
+  if (cells.every(c => c)) return end('Draw!');
+}
+
+function checkWin(p) {
+  const wins = [[0,1,2],[3,4,5],[6,7,8],
+                [0,3,6],[1,4,7],[2,5,8],
+                [0,4,8],[2,4,6]];
+  return wins.some(w => w.every(i => cells[i] === p));
+}
+
+function end(msg) {
+  gameOver = true;
+  message.textContent = msg;
+}
+
+function reset() {
+  cells = Array(9).fill('');
+  gameOver = false;
+  message.textContent = '';
+  render();
+}
+
+render();
+</script>
+</body>
+</html>
